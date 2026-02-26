@@ -400,3 +400,6 @@ footer {
         font-size: 28px;
     }
 }
+body {
+    cursor: none; /* 마우스 커서 숨김 */
+}
