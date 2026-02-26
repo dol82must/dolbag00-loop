@@ -429,16 +429,16 @@ let mouseY = 0;
 
 let frame = 0;
 const totalFrames = 600; // 루프 길이 (프레임 수)
-const speed = 2;          // 이전 1.5 → 2로 약간 빠르게
+const speed = 2;          // 움직임 속도
 
-// 창 크기 대응 radius
-let radiusX = window.innerWidth * 0.6;
-let radiusY = window.innerHeight * 0.4;
+// 화면 비율 기반 radius
+let radiusX = window.innerWidth;
+let radiusY = window.innerHeight;
 
 // 창 크기 바뀔 때 radius 재계산
 window.addEventListener('resize', () => {
-    radiusX = window.innerWidth * 0.6;
-    radiusY = window.innerHeight * 0.4;
+    radiusX = window.innerWidth;
+    radiusY = window.innerHeight;
 });
 
 // animate 루프
@@ -449,18 +449,21 @@ function animate() {
     let progress = (frame % totalFrames) / totalFrames;
     let angle = progress * Math.PI * 2;
 
-    // 약간 유기적인 곡선으로 눈 움직임
-    mouseX = Math.cos(angle * 1.1) * radiusX / window.innerWidth * 2 - 1;
-    mouseY = Math.sin(angle * 1.3) * radiusY / window.innerHeight * 2 - 1;
+    // 모바일 vs PC 화면 대응
+    const factorX = window.innerWidth > 600 ? 0.6 : 0.9;  // 모바일이면 더 안쪽
+    const factorY = window.innerHeight > 600 ? 0.4 : 0.6;
+
+    mouseX = Math.cos(angle * 1.1) * radiusX / window.innerWidth * factorX * 2 - 1;
+    mouseY = Math.sin(angle * 1.3) * radiusY / window.innerHeight * factorY * 2 - 1;
 
     frame += speed;
 
     // ===== 기존 Starfield 업데이트 등 =====
     updateStarfield();
 
-    // 필요하면 카메라나 눈 위치 적용
-    // 예: camera.position.x = mouseX * factor;
-    //     camera.position.y = mouseY * factor;
+    // 필요하면 카메라/눈 위치 적용
+    // camera.position.x = mouseX * factor;
+    // camera.position.y = mouseY * factor;
 }
 
 // 초기 animate 실행
