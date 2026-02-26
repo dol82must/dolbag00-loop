@@ -42,4 +42,3 @@ function animate() {
 
 // 초기 animate 실행
 animate();
-
