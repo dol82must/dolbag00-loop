@@ -217,29 +217,28 @@ if (!isMobile) {
     shadowMesh.visible = false;
 }
 
-// ===== MOUSE / TOUCH =====
+// ===== AUTO LOOP (EXHIBITION MODE) =====
 let mouseX = 0;
 let mouseY = 0;
 
-document.addEventListener('mousemove', (event) => {
-    mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-    mouseY = -((event.clientY / window.innerHeight) * 2 - 1);
-});
-document.addEventListener('touchstart', (event) => {
-    if (event.touches.length > 0) {
-        mouseX = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
-        mouseY = -((event.touches[0].clientY / window.innerHeight) * 2 - 1);
-    }
-}, { passive: true });
-document.addEventListener('touchmove', (event) => {
-    if (event.touches.length > 0) {
-        mouseX = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
-        mouseY = -((event.touches[0].clientY / window.innerHeight) * 2 - 1);
-    }
-}, { passive: true });
-document.addEventListener('touchend', () => { mouseX = 0; mouseY = 0; });
-document.addEventListener('mouseleave', () => { mouseX = 0; mouseY = 0; });
+let frame = 0;
+const totalFrames = 900; // 15초 루프 (60fps 기준)
 
+function autoMove() {
+
+    let progress = (frame % totalFrames) / totalFrames;
+    let angle = progress * Math.PI * 2;
+
+    // -1 ~ 1 범위에서 원형 루프
+    mouseX = Math.cos(angle) * 0.6;
+    mouseY = Math.sin(angle) * 0.4;
+
+    frame++;
+
+    requestAnimationFrame(autoMove);
+}
+
+autoMove();
 // ===== PARALLAX ON SCROLL =====
 window.addEventListener('scroll', () => {
     if (isAnimatingEntrance) return;
