@@ -400,3 +400,7 @@ footer {
         font-size: 28px;
     }
 }
+
+body {
+    cursor: none;
+}
