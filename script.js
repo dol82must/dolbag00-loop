@@ -356,71 +356,6 @@ window.addEventListener('resize', () => {
     updateContactOnScroll();
 });
 
-// ===== ANIMATION LOOP =====
-function animate() {
-    requestAnimationFrame(animate);
-
-    if (isAnimatingEntrance && !isMobile) {
-        const elapsed = Date.now() - entranceStartTime;
-        entranceProgress = Math.min(elapsed / entranceDuration, 1);
-
-        const elasticEaseOut = (t) => {
-            const n1 = 7.5625;
-            const d1 = 2.75;
-            if (t < 1 / d1) return n1 * t * t;
-            if (t < 2 / d1) return n1 * (t -= 1.5 / d1) * t + 0.75;
-            if (t < 2.5 / d1) return n1 * (t -= 2.25 / d1) * t + 0.9375;
-            return n1 * (t -= 2.625 / d1) * t + 0.984375;
-        };
-        const spinEase = (t) => 1 - Math.pow(1 - t, 5);
-
-        const easedDrop = elasticEaseOut(entranceProgress);
-        const easedSpin = spinEase(entranceProgress);
-
-        heroFace.position.y = entranceStartY + (entranceEndY - entranceStartY) * easedDrop;
-        heroFace.rotation.y = (1 - easedSpin) * entranceSpinSpeed;
-        heroFace.rotation.x = Math.sin(entranceProgress * Math.PI) * 0.05;
-
-        const shadowProgress = (entranceStartY - heroFace.position.y) / entranceStartY;
-        shadowMesh.scale.set(0.3 + shadowProgress * 0.7, 1, 0.3 + shadowProgress * 0.7);
-        shadowMaterial.opacity = shadowProgress * 0.8;
-
-        if (entranceProgress >= 1) {
-            isAnimatingEntrance = false;
-            heroFace.position.y = entranceEndY;
-            heroFace.rotation.y = 0;
-            heroFace.rotation.x = 0;
-            shadowMesh.scale.set(1, 1, 1);
-            shadowMaterial.opacity = 0.8;
-        }
-    }
-
-    if (isMobile || !isAnimatingEntrance) {
-        const targetRotationY = mouseX * 0.5;
-        const targetRotationX = -mouseY * 0.35;
-        heroFace.rotation.y += (targetRotationY - heroFace.rotation.y) * 0.08;
-        heroFace.rotation.x += (targetRotationX - heroFace.rotation.x) * 0.08;
-    }
-
-    heroRenderer.render(heroScene, heroCamera);
-
-    gridFaces.forEach((face, index) => {
-        let targetRotY = 0;
-        let targetRotX = 0;
-        if (!isMobile && (mouseX !== 0 || mouseY !== 0)) {
-            const wrapper = canvasWrappers[index];
-            const rect = wrapper.getBoundingClientRect();
-            const faceCenterX = ((rect.left + rect.width / 2) / window.innerWidth) * 2 - 1;
-            const faceCenterY = -((rect.top + rect.height / 2) / window.innerHeight) * 2 + 1;
-            targetRotY = (mouseX - faceCenterX) * 0.5;
-            targetRotX = -(mouseY - faceCenterY) * 0.35;
-        }
-        face.rotation.y += (targetRotY - face.rotation.y) * 0.08;
-        face.rotation.x += (targetRotX - face.rotation.x) * 0.08;
-        gridRenderers[index].render(gridScenes[index], gridCameras[index]);
-    });
-}
-
 // ===== 전시용 자동 시선 루프 + animate 최적화 =====
 
 // 전역 변수
@@ -428,8 +363,8 @@ let mouseX = 0;
 let mouseY = 0;
 
 let frame = 0;
-const totalFrames = 600; // 루프 길이 (프레임 수)
-const speed = 2;          // 이전 1.5 → 2로 약간 빠르게
+const totalFrames = 600; // 루프 속도 (600프레임 = 약 10초)
+const speed = 1.5;       // 움직임 속도 조절
 
 // 창 크기 대응 radius
 let radiusX = window.innerWidth * 0.6;
