@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dolbag001</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="starfield"></div>
+    <div id="dol82-label">dol82</div>
+    <div id="hero-container"></div>
+
+    <section id="faces-section">
+        <div id="faces-grid">
+            <div class="face-item" data-face="0" data-action="scroll-top">
+                <div class="face-canvas-wrapper"></div>
+                <div class="face-label">HOME</div>
+            </div>
+            <div class="face-item" data-face="1">
+                <div class="face-canvas-wrapper"></div>
+                <div class="face-label">COLLECTION</div>
+            </div>
+            <div class="face-item" data-face="2" data-action="scroll-contact">
+                <div class="face-canvas-wrapper"></div>
+                <div class="face-label">CONTACT</div>
+            </div>
+            <div class="face-item" data-face="3" data-action="scroll-contact">
+                <div class="face-canvas-wrapper"></div>
+                <div class="face-label">AMAZON</div>
+            </div>
+            <div class="face-item" data-face="4" data-action="scroll-contact">
+                <div class="face-canvas-wrapper"></div>
+                <div class="face-label">SHOP</div>
+            </div>
+            <div class="face-item" data-face="5" data-action="link" data-url="https://smartstore.naver.com/dol82must">
+                <div class="face-canvas-wrapper"></div>
+                <div class="face-label">SMART STORE</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact-section">
+        <h2 class="contact-title">CONTACT</h2>
+        <div class="contact-content">
+            <div class="contact-left">
+                <h3 class="contact-section-title">Inquiries | 문의 </h3>
+                <p class="contact-email"><a href="mailto:dol82must@gmail.com">dol82must@gmail.com</a></p>
+            </div>
+            <div class="contact-right">
+                <div class="contact-links-group">
+                    <h3 class="contact-section-title">Follow Us | 소셜</h3>
+                    <p class="contact-link"><a href="https://www.instagram.com/dol82dotcom" target="_blank">instagram.com/dol82dotcom</a></p>
+                </div>
+                <div class="contact-links-group">
+                    <h3 class="contact-section-title">Official Online Store | 공식 온라인 스토어</h3>
+                    <p class="contact-link"><a href="https://dol82.com/" target="_blank">dol82.com</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer style="width: 100%; background: #161616; padding: 20px; text-align: center;">
+        <p style="font-family: 'Roboto', sans-serif; font-size: 10px; color: #cccccc; line-height: 1.6;">
+            Company Name: dol82 | Email: <a href="mailto:dol82must@gmail.com" style="color: #cccccc; text-decoration: none;">dol82must@gmail.com</a> | <span class="footer-no-break">Business Registration Number: 456-25-02219 | </span><span class="footer-break"><br>Business Registration Number: 456-25-02219 | </span><br>© 2026 dol82.com All Rights Reserved.
+        </p>
+    </footer>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <script>
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: 'vertical',
+            smoothWheel: true
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+
+        requestAnimationFrame(raf);
+    </script>
+    <script src="starfield.js"></script>
+    <script type="module" src="script.js"></script>
+</body>
+</html>
