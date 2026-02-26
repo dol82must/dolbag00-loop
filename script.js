@@ -222,7 +222,7 @@ let mouseX = 0;
 let mouseY = 0;
 
 let frame = 0;
-const totalFrames = 900; // 15초 루프 (60fps 기준)
+const totalFrames = 600; // 10초 루프 (60fps 기준)
 
 function autoMove() {
 
