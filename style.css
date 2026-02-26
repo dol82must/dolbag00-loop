@@ -29,6 +29,11 @@ body {
     overflow-x: hidden;
 }
 
+body {
+    cursor: none;
+}
+
+
 #hero-container {
     width: 100vw;
     height: 100vh;
@@ -401,6 +406,3 @@ footer {
     }
 }
 
-{
-    cursor: none;
-}
