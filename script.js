@@ -421,7 +421,6 @@ function animate() {
     });
 }
 
-animate();
 // ===== 전시용 자동 시선 루프 + animate 최적화 =====
 
 // 전역 변수
@@ -429,8 +428,8 @@ let mouseX = 0;
 let mouseY = 0;
 
 let frame = 0;
-const totalFrames = 600; // 루프 속도 (600프레임 = 약 10초)
-const speed = 1.5;       // 움직임 속도 조절
+const totalFrames = 600; // 루프 길이 (프레임 수)
+const speed = 2;          // 이전 1.5 → 2로 약간 빠르게
 
 // 창 크기 대응 radius
 let radiusX = window.innerWidth * 0.6;
