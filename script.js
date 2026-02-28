@@ -401,15 +401,21 @@ function animate() {
         }
     }
 
-    if (isMobile || !isAnimatingEntrance) {
-        const targetRotationY = mouseX * 0.5;
-        const targetRotationX = -mouseY * 0.35;
-        heroFace.rotation.y += (targetRotationY - heroFace.rotation.y) * 0.08;
-        heroFace.rotation.x += (targetRotationX - heroFace.rotation.x) * 0.08;
-    } else {
+   const now = Date.now();
 
-    // ===== ORGANIC LOOP =====
-    const t = Date.now() * 0.0003;
+// 마우스 1초 이상 움직였을 때만 활성화
+if (isMouseActive && now - lastMouseMoveTime > 1000) {
+
+    const targetRotationY = mouseX * 0.5;
+    const targetRotationX = -mouseY * 0.35;
+
+    heroFace.rotation.y += (targetRotationY - heroFace.rotation.y) * 0.08;
+    heroFace.rotation.x += (targetRotationX - heroFace.rotation.x) * 0.08;
+
+} else {
+
+    // ===== ORGANIC AUTO LOOP =====
+    const t = now * 0.0003;
 
     const driftY = Math.sin(t * 0.7) * 0.4;
     const driftX = Math.cos(t * 0.5) * 0.2;
