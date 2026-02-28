@@ -401,7 +401,20 @@ function animate() {
         const targetRotationX = -mouseY * 0.35;
         heroFace.rotation.y += (targetRotationY - heroFace.rotation.y) * 0.08;
         heroFace.rotation.x += (targetRotationX - heroFace.rotation.x) * 0.08;
-    }
+    } else {
+
+    // ===== ORGANIC LOOP =====
+    const t = Date.now() * 0.0003;
+
+    const driftY = Math.sin(t * 0.7) * 0.4;
+    const driftX = Math.cos(t * 0.5) * 0.2;
+
+    const microY = Math.sin(t * 2.3) * 0.05;
+    const microX = Math.cos(t * 1.7) * 0.04;
+
+    heroFace.rotation.y = driftY + microY;
+    heroFace.rotation.x = driftX + microX;
+}
 
     heroRenderer.render(heroScene, heroCamera);
 
