@@ -417,6 +417,7 @@ function animate() {
 }
 
     heroRenderer.render(heroScene, heroCamera);
+    requestAnimationFrame(animate);
 
     gridFaces.forEach((face, index) => {
         let targetRotY = 0;
