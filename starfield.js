@@ -25,11 +25,21 @@ for (let i = 0; i < starCount; i++) {
     stars.push({ element: star, speed: speed, initialY: y });
 }
 
-window.addEventListener('scroll', () => {
-    const scrollY = window.scrollY;
-    
+// ===== AUTO STAR LOOP =====
+
+let frame = 0;
+
+function animateStars() {
+    requestAnimationFrame(animateStars);
+
+    frame++;
+
+    const offset = frame * 0.03 + Math.sin(frame * 0.01) * 1.5;
+
     stars.forEach(star => {
-        const translateY = scrollY * star.speed;
-        star.element.style.transform = `translateY(${translateY}px)`;
+        const y = (star.initialY + offset * star.speed) % 100;
+        star.element.style.top = y + '%';
     });
-});
+}
+
+animateStars();
