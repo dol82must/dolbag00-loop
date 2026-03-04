@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+body {
+    background:#000;
+    margin:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+#dosBox {
+    width:580px;
+    height:460px;
+    background:#000;
+    color:#00ff66;
+    border:2px solid #00ff66;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:14px;
+    padding:20px;
+    box-shadow:0 0 20px #00ff66;
+    overflow-y:auto;
+    line-height:1.6;
+}
+</style>
+</head>
+<body>
+
+<div id="dosBox"><div id="text"></div></div>
+
+<script>
+
+let textDiv = document.getElementById("text");
+let step = 0;
+
+function print(t){
+    textDiv.innerHTML += t + "<br>";
+    textDiv.scrollTop = textDiv.scrollHeight;
+}
+
+function start(){
+    print("DOLBAG EMOTION SYSTEM v0.02");
+    print("돌백 감정 보정 시스템 v0.02");
+    print("");
+    print("Initialize emotional scan? (Y/N)");
+    print("감정 스캔을 시작하시겠습니까? (Y/N)");
+}
+
+document.addEventListener("keydown", function(e){
+
+    // 시작
+    if(step === 0 && e.key.toLowerCase()==="y"){
+        step = 1;
+        print("> Y");
+        print("");
+        print("Loading emotional matrix...");
+        print("감정 매트릭스 로딩 중...");
+        setTimeout(()=>{
+            print("██████████░░░░░░ 54%");
+        },800);
+        setTimeout(()=>{
+            print("████████████████ 100%");
+            askQ1();
+        },2000);
+    }
+
+    // Q1
+    else if(step===1 && e.key>="1" && e.key<="9"){
+        step=2;
+        print("> "+e.key);
+        askQ2();
+    }
+
+    // Q2
+    else if(step===2 && e.key>="1" && e.key<="9"){
+        step=3;
+        print("> "+e.key);
+        askQ3();
+    }
+
+    // Q3
+    else if(step===3 && e.key>="1" && e.key<="6"){
+        step=4;
+        print("> "+e.key);
+        analyze();
+    }
+
+});
+
+function askQ1(){
+    print("");
+    print("Q1. How do you feel today?");
+    print("Q1. 오늘 당신의 감정은 무엇입니까?");
+    print("1 Joy / 기쁨");
+    print("2 Sadness / 슬픔");
+    print("3 Loneliness / 외로움");
+    print("4 Anger / 분노");
+    print("5 Anxiety / 불안");
+    print("6 Love / 사랑");
+    print("7 Doubt / 의심");
+    print("8 Excitement / 설렘");
+    print("9 Boredom / 지루함");
+}
+
+function askQ2(){
+    print("");
+    print("Q2. Which emotion would you like to maintain?");
+    print("Q2. 유지하고 싶은 감정은 무엇입니까?");
+    print("(1-9 동일 선택)");
+}
+
+function askQ3(){
+    print("");
+    print("Q3. What do you need most right now?");
+    print("Q3. 지금 가장 필요한 것은 무엇입니까?");
+    print("1 Comfort / 위로");
+    print("2 Motivation / 동기");
+    print("3 Focus / 집중");
+    print("4 Rest / 휴식");
+    print("5 Recognition / 인정");
+    print("6 Connection / 연결");
+}
+
+function analyze(){
+    print("");
+    print("Cross-analyzing emotional vectors...");
+    print("감정 벡터 교차 분석 중...");
+    setTimeout(()=>{
+        print("");
+        print("Result / 결과");
+        print("EMOTION STATUS: STABLE");
+        print("감정 상태: 안정");
+        print("");
+        print("FACE OUTPUT: :-|");
+        print("출력 표정: 무표정");
+        print("");
+        print("All inputs converge.");
+        print("모든 입력은 수렴합니다.");
+    },1500);
+}
+
+start();
+
+</script>
+
+</body>
+</html>
