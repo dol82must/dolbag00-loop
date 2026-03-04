@@ -185,20 +185,53 @@ function animate(){
   animate();
 }
 
-function result(){
+.function result(){
 
-  box.innerHTML=`
-  Result / 결과<br><br>
-  EMOTION STATUS: STABLE<br>
-  감정 상태: 안정<br><br>
-  FACE OUTPUT: :-|<br>
-  출력 표정: 무표정<br><br>
-  <div style="margin-top:20px;font-size:12px;opacity:0.5;cursor:pointer;">
-  Restart
+  box.innerHTML = `
+
+  <div style="font-size:12px;letter-spacing:1px;opacity:0.5;">
+    EMOTION STATUS / 감정 상태
   </div>
+
+  <div style="margin-top:6px;font-size:18px;margin-bottom:28px;">
+    Stable / 안정
+  </div>
+
+  <div style="display:flex;align-items:center;gap:24px;">
+
+    <img src="einstein.png"
+         style="
+         width:120px;
+         filter:grayscale(100%);
+         opacity:0.92;
+         ">
+
+    <div>
+      <div style="font-size:12px;letter-spacing:1px;opacity:0.5;">
+        FACE OUTPUT / 출력 표정
+      </div>
+
+      <div style="margin-top:8px;font-size:16px;">
+        AI Emotional Reflection<br>
+        감정 반영 결과
+      </div>
+    </div>
+
+  </div>
+
+  <div style="
+      margin-top:36px;
+      font-size:12px;
+      opacity:0.35;
+      cursor:pointer;
+      letter-spacing:1px;
+  ">
+    RESTART / 다시 시작
+  </div>
+
   `;
 
-  box.querySelector("div").onclick=start;
+  box.querySelector("div:last-child").onclick = start;
 }
 
 </script>
