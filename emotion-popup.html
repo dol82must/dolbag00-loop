@@ -3,202 +3,120 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dolbag001 Emotion OS</title>
+<title>Stone → Brain → Network</title>
 
 <style>
 body {
   margin: 0;
   background: #ffffff;
   font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  flex-direction: column;
   color: #111;
+  overflow-x: hidden;
 }
 
-.logo {
-  font-size: 28px;
-  font-weight: bold;
-  margin-bottom: 40px;
+.section {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 1.2s ease, transform 1.2s ease;
+  opacity: 0;
+  transform: translateY(40px);
 }
 
-.container {
-  width: 420px;
-  text-align: left;
-  transition: opacity 0.5s ease;
+.section.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.question {
-  font-size: 18px;
-  margin-bottom: 20px;
-  font-weight: 600;
-}
-
-.option {
-  margin: 8px 0;
-  cursor: pointer;
-  padding: 6px 0;
-  transition: opacity 0.3s;
-}
-
-.option:hover {
-  opacity: 0.5;
-}
-
-.center-text {
+.box {
+  background: #f7f7f7;
+  padding: 60px;
+  border-radius: 12px;
+  max-width: 700px;
   text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+}
+
+h1 {
+  font-size: 42px;
+  margin-bottom: 30px;
+  letter-spacing: 2px;
+}
+
+p {
+  font-size: 20px;
   line-height: 1.8;
-  font-size: 16px;
+  color: #555;
 }
 
-/* 로딩 스피너 */
-.spinner {
-  border: 4px solid #eee;
-  border-top: 4px solid #111;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-  margin: 0 auto 20px auto;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+/* 타자기 효과 */
+.typewriter {
+  border-right: 2px solid #000;
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
 }
 </style>
 </head>
+
 <body>
 
-<div class="logo">Dolbag001</div>
-<div class="container" id="app"></div>
+<div class="section">
+  <div class="box">
+    <h1>STONE</h1>
+    <p class="typewriter" data-text="The origin of cognition. Matter before mind."></p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="box">
+    <h1>BRAIN</h1>
+    <p class="typewriter" data-text="Neural expansion. Consciousness emerges."></p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="box">
+    <h1>NETWORK</h1>
+    <p class="typewriter" data-text="Human and AI connected. Perception extended."></p>
+  </div>
+</div>
 
 <script>
+// 스크롤 애니메이션
+const sections = document.querySelectorAll('.section');
 
-const app = document.getElementById("app");
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      typeEffect(entry.target.querySelector('.typewriter'));
+    }
+  });
+}, { threshold: 0.3 });
 
-const emotions = [
-"1 Joy / 기쁨",
-"2 Sadness / 슬픔",
-"3 Loneliness / 외로움",
-"4 Anger / 분노",
-"5 Anxiety / 불안",
-"6 Love / 사랑",
-"7 Doubt / 의심",
-"8 Excitement / 설렘",
-"9 Boredom / 지루함"
-];
-
-const needs = [
-"1 Comfort / 위로",
-"2 Motivation / 동기",
-"3 Focus / 집중",
-"4 Rest / 휴식",
-"5 Recognition / 인정",
-"6 Connection / 연결"
-];
-
-let step = 0;
-
-function renderQuestion() {
-
-app.innerHTML = "";
-
-let questionText = "";
-let options = [];
-
-if(step === 0){
-questionText = `
-<div class="question">
-Q1<br>
-How do you feel today?<br>
-오늘 당신의 감정은 무엇입니까?
-</div>`;
-options = emotions;
-}
-else if(step === 1){
-questionText = `
-<div class="question">
-Q2<br>
-Which emotion would you like to maintain?<br>
-유지하고 싶은 감정은 무엇입니까?
-</div>`;
-options = emotions;
-}
-else if(step === 2){
-questionText = `
-<div class="question">
-Q3<br>
-What do you need most right now?<br>
-지금 가장 필요한 것은 무엇입니까?
-</div>`;
-options = needs;
-}
-
-app.innerHTML += questionText;
-
-options.forEach(opt => {
-const div = document.createElement("div");
-div.className = "option";
-div.innerText = opt;
-div.onclick = nextStep;
-app.appendChild(div);
+sections.forEach(section => {
+  observer.observe(section);
 });
+
+// 타자기 효과
+function typeEffect(element) {
+  if (!element) return;
+  let text = element.getAttribute("data-text");
+  element.textContent = "";
+  let i = 0;
+
+  function typing() {
+    if (i < text.length) {
+      element.textContent += text.charAt(i);
+      i++;
+      setTimeout(typing, 40);
+    }
+  }
+
+  typing();
 }
-
-function nextStep(){
-step++;
-if(step < 3){
-renderQuestion();
-}else{
-showLoading();
-}
-}
-
-function showLoading(){
-
-app.innerHTML = `
-<div class="center-text">
-<div class="spinner"></div>
-Cross-analyzing emotional vectors...<br>
-감정 벡터 교차 분석 중...
-</div>
-`;
-
-setTimeout(()=>{
-app.innerHTML += `
-<br>
-Converging outputs...<br>
-출력값 수렴 중...
-`;
-},1500);
-
-setTimeout(()=>{
-showResult();
-},3000);
-}
-
-function showResult(){
-app.innerHTML = `
-<div class="center-text">
-<strong>Result / 결과</strong><br><br>
-
-EMOTION STATUS: STABLE<br>
-감정 상태: 안정<br><br>
-
-FACE OUTPUT: :-|<br>
-출력 표정: 무표정<br><br>
-
-All inputs converge.<br>
-모든 입력은 수렴합니다.
-</div>
-`;
-}
-
-renderQuestion();
-
 </script>
 
 </body>
