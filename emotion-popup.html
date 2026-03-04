@@ -119,14 +119,17 @@ function render(){
     d.className="option";
     d.innerText=options[i];
 
-    d.onclick=function(){
-      step++;
-      if(step<3){
-        render();
-      }else{
-        load();
-      }
-    };
+   div.onclick=function(event){
+
+  event.stopPropagation();   // ★ 이 줄 추가
+
+  step++;
+  if(step<3){
+    render();
+  }else{
+    box.innerHTML="Done.";
+  }
+};;
 
     box.appendChild(d);
   }
