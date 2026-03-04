@@ -185,7 +185,7 @@ function animate(){
   animate();
 }
 
-.function result(){
+function result(){
 
   box.innerHTML = `
 
@@ -199,7 +199,7 @@ function animate(){
 
   <div style="display:flex;align-items:center;gap:24px;">
 
-    <img src="dolbagi.png"
+    <img src="einstein.png"
          style="
          width:120px;
          filter:grayscale(100%);
@@ -219,19 +219,24 @@ function animate(){
 
   </div>
 
-  <div style="
-      margin-top:36px;
-      font-size:12px;
-      opacity:0.35;
-      cursor:pointer;
-      letter-spacing:1px;
-  ">
+  <div id="restartBtn"
+       style="
+       margin-top:36px;
+       font-size:12px;
+       opacity:0.35;
+       cursor:pointer;
+       letter-spacing:1px;
+       ">
     RESTART / 다시 시작
   </div>
 
   `;
 
-  box.querySelector("div:last-child").onclick = start;
+  document.getElementById("restartBtn").onclick = function(){
+    box.classList.add("start");
+    box.innerHTML = "Test your emotion";
+    box.addEventListener("click", start);
+  };
 }
 
 </script>
