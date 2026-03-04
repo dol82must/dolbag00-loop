@@ -232,8 +232,11 @@ function result(){
   </div>
   `;
 
-  document.getElementById("restartBtn").onclick=start;
-}
+document.getElementById("restartBtn").onclick = function(){
+  box.innerHTML = "Test your emotion";
+  box.classList.add("start");
+  box.onclick = start;   // 다시 연결
+};
 
 </script>
 
