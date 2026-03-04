@@ -3,50 +3,59 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dolbag001</title>
+<title>Emotion System</title>
 
 <style>
 body{
   margin:0;
-  font-family:-apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
   background:#ffffff;
-  display:flex;
-  justify-content:center;
-  align-items:center;
   height:100vh;
+  display:flex;
   flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
   color:#111;
 }
 
-.menu{
-  position:absolute;
-  top:20px;
+/* 상단 메뉴 */
+.top{
+  margin-top:40px;
   text-align:center;
+  font-size:14px;
+  opacity:0.6;
 }
 
+/* Test box 위치 */
+.wrapper{
+  margin-top:120px;   /* ← 여기서 위/아래 조절 가능 */
+}
+
+/* 네모 박스 */
 .test-box{
   width:360px;
+  min-height:140px;
   border:1px solid #111;
-  border-radius:12px;
+  border-radius:14px;
   padding:20px;
-  cursor:pointer;
   transition:0.3s;
 }
 
-.test-box:hover{
-  background:#111;
-  color:#fff;
+.start{
+  cursor:pointer;
+  text-align:center;
 }
 
-.inner{
-  font-size:14px;
-  line-height:1.6;
+.start:hover{
+  background:#111;
+  color:#fff;
 }
 
 .option{
   margin:6px 0;
   cursor:pointer;
   opacity:0.8;
+  font-size:14px;
 }
 
 .option:hover{
@@ -58,7 +67,7 @@ body{
   height:6px;
   background:#eee;
   border-radius:4px;
-  margin-top:15px;
+  margin-top:12px;
   overflow:hidden;
 }
 
@@ -66,73 +75,75 @@ body{
   height:100%;
   width:0%;
   background:#111;
-  transition:width 0.2s linear;
 }
 
-.small{
+.percent{
   font-size:12px;
-  margin-top:8px;
+  margin-top:6px;
   opacity:0.6;
 }
 </style>
 </head>
 <body>
 
-<div class="menu">
-  Home<br>
-  Main Menu
+<div class="top">
+Home<br>
+Main Menu
 </div>
 
-<div class="test-box" id="box">
-  Test your emotion
+<div class="wrapper">
+  <div class="test-box start" id="box">
+    Test your emotion
+  </div>
 </div>
 
 <script>
 
 const box = document.getElementById("box");
 
-const emotions = [
+const emotions=[
 "Joy / 기쁨","Sadness / 슬픔","Loneliness / 외로움",
 "Anger / 분노","Anxiety / 불안","Love / 사랑",
 "Doubt / 의심","Excitement / 설렘","Boredom / 지루함"
 ];
 
-const needs = [
+const needs=[
 "Comfort / 위로","Motivation / 동기","Focus / 집중",
 "Rest / 휴식","Recognition / 인정","Connection / 연결"
 ];
 
-let step = 0;
+let step=0;
 
-box.onclick = startTest;
+box.addEventListener("click",startTest);
 
 function startTest(){
-  step = 0;
+  step=0;
   renderQuestion();
 }
 
 function renderQuestion(){
 
-  let question = "";
-  let options = [];
+  let q="";
+  let options=[];
 
-  if(step === 0){
-    question = "Q1<br>How do you feel today?<br>오늘 당신의 감정은 무엇입니까?";
-    options = emotions;
+  if(step===0){
+    q="Q1<br>How do you feel today?<br>오늘 당신의 감정은 무엇입니까?";
+    options=emotions;
   }
-  else if(step === 1){
-    question = "Q2<br>Which emotion would you like to maintain?<br>유지하고 싶은 감정은 무엇입니까?";
-    options = emotions;
+  else if(step===1){
+    q="Q2<br>Which emotion would you like to maintain?<br>유지하고 싶은 감정은 무엇입니까?";
+    options=emotions;
   }
-  else if(step === 2){
-    question = "Q3<br>What do you need most right now?<br>지금 가장 필요한 것은 무엇입니까?";
-    options = needs;
+  else{
+    q="Q3<br>What do you need most right now?<br>지금 가장 필요한 것은 무엇입니까?";
+    options=needs;
   }
 
-  box.innerHTML = `<div class="inner">${question}</div>`;
+  box.classList.remove("start");
+  box.innerHTML="<div>"+q+"</div>";
 
   options.forEach(opt=>{
-    const div = document.createElement("div");
+    const div=document.createElement("div");
     div.className="option";
     div.innerText=opt;
     div.onclick=()=>{
@@ -149,46 +160,46 @@ function renderQuestion(){
 
 function startLoading(){
 
-  box.innerHTML = `
-  <div class="inner">
+  box.innerHTML=`
   AI analyzing...<br>
   감정 데이터 분석 중...
   <div class="progress-bar">
-    <div class="progress" id="progress"></div>
+    <div class="progress" id="bar"></div>
   </div>
-  <div class="small" id="percent">0%</div>
-  </div>
+  <div class="percent" id="percent">0%</div>
   `;
 
-  let progress = 0;
-  const progressEl = document.getElementById("progress");
-  const percentEl = document.getElementById("percent");
+  let p=0;
+  const bar=document.getElementById("bar");
+  const percent=document.getElementById("percent");
 
   function animate(){
 
-    if(progress < 54){
+    if(p<54){
 
-      // 가속 → 감속 효과
       let speed;
-      if(progress < 20){
-        speed = 4;      // 빠르게
-      }else if(progress < 40){
-        speed = 2;      // 중간
+
+      if(p<15){
+        speed=5;      // 빠름
+      }else if(p<35){
+        speed=2;      // 중간
       }else{
-        speed = 0.8;    // 느려짐
+        speed=0.6;    // 느려짐
       }
 
-      progress += speed;
+      p+=speed;
 
-      progressEl.style.width = progress + "%";
-      percentEl.innerText = Math.floor(progress) + "%";
+      bar.style.width=p+"%";
+      percent.innerText=Math.floor(p)+"%";
 
-      setTimeout(animate, 80);
+      setTimeout(animate,80);
 
     }else{
-      progressEl.style.width = "54%";
-      percentEl.innerText = "54%";
-      showResult();
+
+      bar.style.width="54%";
+      percent.innerText="54%";
+
+      setTimeout(showResult,1200);
     }
   }
 
@@ -196,17 +207,19 @@ function startLoading(){
 }
 
 function showResult(){
-  setTimeout(()=>{
-    box.innerHTML = `
-    <div class="inner">
-    Result / 결과<br><br>
-    EMOTION STATUS: STABLE<br>
-    감정 상태: 안정<br><br>
-    FACE OUTPUT: :-|<br>
-    출력 표정: 무표정
-    </div>
-    `;
-  },1200);
+
+  box.innerHTML=`
+  Result / 결과<br><br>
+  EMOTION STATUS: STABLE<br>
+  감정 상태: 안정<br><br>
+  FACE OUTPUT: :-|<br>
+  출력 표정: 무표정<br><br>
+  <div style="margin-top:15px; font-size:12px; opacity:0.6; cursor:pointer;">
+  Restart
+  </div>
+  `;
+
+  box.querySelector("div").onclick=startTest;
 }
 
 </script>
