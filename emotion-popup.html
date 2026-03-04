@@ -19,12 +19,13 @@ body{
 .container{ margin-top:140px; }
 .box{
   width:420px;
-  min-height:160px;
-  border:1px solid #e5e5e5;
-  border-radius:18px;
-  padding:28px;
-  box-shadow:0 10px 40px rgba(0,0,0,0.05);
-  transition:0.3s;
+  min-height:180px;
+  border:1px solid #f0f0f0;
+  border-radius:22px;
+  padding:32px;
+  box-shadow:0 30px 80px rgba(0,0,0,0.06);
+  backdrop-filter: blur(6px);
+  transition:0.4s cubic-bezier(.4,0,.2,1);
 }
 .start{
   cursor:pointer;
@@ -49,7 +50,8 @@ body{
 .progress{
   height:100%;
   width:0%;
-  background:#111;
+  background:linear-gradient(90deg,#111,#555);
+  transition:width 0.2s ease-out;
 }
 .percent{
   font-size:12px;
@@ -109,7 +111,7 @@ function render(){
   }
 
   box.classList.remove("start");
-  box.innerHTML=q;
+  box.innerHTML = `<div style="margin-bottom:16px;">${q}</div>`;
 
   options.forEach(opt=>{
     const d=document.createElement("div");
@@ -144,16 +146,41 @@ function load(){
   const bar=document.getElementById("bar");
   const percent=document.getElementById("percent");
 
-  function animate(){
-    if(p<54){
-      p+=2;
-      bar.style.width=p+"%";
-      percent.innerText=Math.floor(p)+"%";
-      setTimeout(animate,80);
-    }else{
-      setTimeout(result,1000);
+function animate(){
+
+  if(p < 54){
+
+    let speed;
+    let delay;
+
+    if(p < 20){
+      speed = 3.5;
+      delay = 60;
     }
+    else if(p < 40){
+      speed = 1.8;
+      delay = 90;
+    }
+    else{
+      speed = 0.5;
+      delay = 140;
+    }
+
+    p += speed;
+
+    bar.style.width = p + "%";
+    percent.innerText = Math.floor(p) + "%";
+
+    setTimeout(animate, delay);
+
+  }else{
+
+    bar.style.width = "54%";
+    percent.innerText = "54%";
+
+    setTimeout(result, 1200);
   }
+}
 
   animate();
 }
