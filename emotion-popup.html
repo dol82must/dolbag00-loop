@@ -17,14 +17,15 @@ body{
   color:#111;
 }
 .container{ margin-top:140px; }
-.box{
+..box{
   width:420px;
   min-height:180px;
   border:1px solid #f0f0f0;
   border-radius:22px;
   padding:32px;
   box-shadow:0 30px 80px rgba(0,0,0,0.06);
-  transition:0.4s;
+  backdrop-filter: blur(6px);
+  transition:0.4s cubic-bezier(.4,0,.2,1);
 }
 .start{
   cursor:pointer;
@@ -50,6 +51,7 @@ body{
   height:100%;
   width:0%;
   background:linear-gradient(90deg,#111,#555);
+  transition:width 0.2s ease-out;
 }
 .percent{
   font-size:12px;
@@ -133,15 +135,20 @@ function render(){
 function load(){
 
   box.innerHTML=`
-  AI ANALYZING...<br>
-  감정 데이터 분석 중...
-  <div class="progress-wrap">
-    <div class="progress-bar">
-      <div class="progress" id="bar"></div>
-    </div>
-    <div class="percent" id="percent">0%</div>
+<div style="font-size:14px;letter-spacing:1px;margin-bottom:8px;">
+AI ANALYZING...
+</div>
+<div style="font-size:12px;opacity:0.5;margin-bottom:20px;">
+감정 데이터 처리 중
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-bar">
+    <div class="progress" id="bar"></div>
   </div>
-  `;
+  <div class="percent" id="percent">0%</div>
+</div>
+`;
 
   let p=0;
   const bar=document.getElementById("bar");
@@ -149,30 +156,39 @@ function load(){
 
   function animate(){
 
-    if(p<54){
+  if(p < 54){
 
-      let speed;
-      let delay;
+    let speed;
+    let delay;
 
-      if(p<20){ speed=3.5; delay=60; }
-      else if(p<40){ speed=1.8; delay=90; }
-      else{ speed=0.5; delay=140; }
-
-      p+=speed;
-
-      bar.style.width=p+"%";
-      percent.innerText=Math.floor(p)+"%";
-
-      setTimeout(animate,delay);
-
-    }else{
-
-      bar.style.width="54%";
-      percent.innerText="54%";
-
-      setTimeout(result,1200);
+    if(p < 20){
+      speed = 3.5;
+      delay = 60;
     }
+    else if(p < 40){
+      speed = 1.8;
+      delay = 90;
+    }
+    else{
+      speed = 0.5;
+      delay = 140;
+    }
+
+    p += speed;
+
+    bar.style.width = p + "%";
+    percent.innerText = Math.floor(p) + "%";
+
+    setTimeout(animate, delay);
+
+  }else{
+
+    bar.style.width = "54%";
+    percent.innerText = "54%";
+
+    setTimeout(result, 1200);
   }
+}
 
   animate();
 }
