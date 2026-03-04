@@ -24,8 +24,7 @@ body{
   border-radius:22px;
   padding:32px;
   box-shadow:0 30px 80px rgba(0,0,0,0.06);
-  backdrop-filter: blur(6px);
-  transition:0.4s cubic-bezier(.4,0,.2,1);
+  transition:0.4s;
 }
 .start{
   cursor:pointer;
@@ -51,7 +50,6 @@ body{
   height:100%;
   width:0%;
   background:linear-gradient(90deg,#111,#555);
-  transition:width 0.2s ease-out;
 }
 .percent{
   font-size:12px;
@@ -63,14 +61,15 @@ body{
 
 <body>
 
-<div class="box start" id="box" onclick="start()">
-  Test your emotion
-</div>
+<div class="container">
+  <div class="box start" id="box">
+    Test your emotion
+  </div>
 </div>
 
 <script>
 
-const box=document.getElementById("box");
+const box = document.getElementById("box");
 
 const emotions=[
 "Joy / 기쁨","Sadness / 슬픔","Loneliness / 외로움",
@@ -85,21 +84,56 @@ const needs=[
 
 let step=0;
 
-box.addEventListener("click", start);
+box.onclick = start;
 
 function start(){
- 
   step=0;
   render();
 }
 
-<div class="box start" id="box" onclick="start()">
-  Test your emotion
-</div>
+function render(){
+
+  let q="";
+  let options=[];
+
+  if(step===0){
+    q="Q1<br>How do you feel today?<br><br>오늘 당신의 감정은 무엇입니까?";
+    options=emotions;
+  } 
+  else if(step===1){
+    q="Q2<br>Which emotion would you like to maintain?<br><br>유지하고 싶은 감정은 무엇입니까?";
+    options=emotions;
+  } 
+  else {
+    q="Q3<br>What do you need most right now?<br><br>지금 가장 필요한 것은 무엇입니까?";
+    options=needs;
+  }
+
+  box.innerHTML = `<div style="margin-bottom:16px;">${q}</div>`;
+
+  for(let i=0;i<options.length;i++){
+
+    const d=document.createElement("div");
+    d.className="option";
+    d.innerText=options[i];
+
+    d.onclick=function(){
+      step++;
+      if(step<3){
+        render();
+      }else{
+        load();
+      }
+    };
+
+    box.appendChild(d);
+  }
+}
+
 function load(){
 
   box.innerHTML=`
-  AI analyzing...<br>
+  AI ANALYZING...<br>
   감정 데이터 분석 중...
   <div class="progress-wrap">
     <div class="progress-bar">
@@ -113,48 +147,39 @@ function load(){
   const bar=document.getElementById("bar");
   const percent=document.getElementById("percent");
 
-function animate(){
+  function animate(){
 
-  if(p < 54){
+    if(p<54){
 
-    let speed;
-    let delay;
+      let speed;
+      let delay;
 
-    if(p < 20){
-      speed = 3.5;
-      delay = 60;
+      if(p<20){ speed=3.5; delay=60; }
+      else if(p<40){ speed=1.8; delay=90; }
+      else{ speed=0.5; delay=140; }
+
+      p+=speed;
+
+      bar.style.width=p+"%";
+      percent.innerText=Math.floor(p)+"%";
+
+      setTimeout(animate,delay);
+
+    }else{
+
+      bar.style.width="54%";
+      percent.innerText="54%";
+
+      setTimeout(result,1200);
     }
-    else if(p < 40){
-      speed = 1.8;
-      delay = 90;
-    }
-    else{
-      speed = 0.5;
-      delay = 140;
-    }
-
-    p += speed;
-
-    bar.style.width = p + "%";
-    percent.innerText = Math.floor(p) + "%";
-
-    setTimeout(animate, delay);
-
-  }else{
-
-    bar.style.width = "54%";
-    percent.innerText = "54%";
-
-    setTimeout(result, 1200);
   }
-}
 
   animate();
 }
 
 function result(){
 
-  box.innerHTML = `
+  box.innerHTML=`
 
   <div style="font-size:12px;letter-spacing:1px;opacity:0.5;">
     EMOTION STATUS / 감정 상태
@@ -167,11 +192,7 @@ function result(){
   <div style="display:flex;align-items:center;gap:24px;">
 
     <img src="dolbagi.png"
-         style="
-         width:120px;
-         filter:grayscale(100%);
-         opacity:0.92;
-         ">
+         style="width:120px;filter:grayscale(100%);opacity:0.92;">
 
     <div>
       <div style="font-size:12px;letter-spacing:1px;opacity:0.5;">
@@ -186,21 +207,14 @@ function result(){
 
   </div>
 
-  <div style="
-      margin-top:36px;
-      font-size:12px;
-      opacity:0.35;
-      cursor:pointer;
-      letter-spacing:1px;
-  ">
+  <div id="restartBtn"
+       style="margin-top:36px;font-size:12px;opacity:0.35;cursor:pointer;">
     RESTART / 다시 시작
   </div>
-
   `;
 
-  box.querySelector("div:last-child").onclick = start;
+  document.getElementById("restartBtn").onclick=start;
 }
-
 
 </script>
 
