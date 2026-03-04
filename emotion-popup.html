@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Emotion Interface</title>
+<title>test your emotion</title>
 
 <style>
 body{
@@ -104,11 +104,7 @@ const needs=[
 
 let step=0;
 
-<div class="box start" id="box" onclick="start(function start(){
-  box.onclick=null;   // 시작 후 부모 클릭 제거
-  step=0;
-  render();
-})">
+<div onclick="location.href='emotion-popup.html'">
   Test your emotion
 </div>
 
@@ -214,7 +210,8 @@ function result(){
   box.querySelector("div").onclick=start;
 }
 
-<script src="./script.js"></script>
-
+<script>
+alert("JS CONNECTED");
+</script>
 </body>
 </html>
