@@ -2,150 +2,154 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OS of Consciousness</title>
 
 <style>
 body {
-    background:#000;
-    margin:0;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
+  margin: 0;
+  background: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  color: #111;
+  overflow-x: hidden;
 }
 
-#dosBox {
-    width:580px;
-    height:460px;
-    background:#000;
-    color:#00ff66;
-    border:2px solid #00ff66;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:14px;
-    padding:20px;
-    box-shadow:0 0 20px #00ff66;
-    overflow-y:auto;
-    line-height:1.6;
+.section {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 1s ease;
+}
+
+.section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 파일 창 */
+.window {
+  width: 700px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.08);
+  overflow: hidden;
+  border: 1px solid #eaeaea;
+}
+
+.window-header {
+  background: #f5f5f5;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.dot {
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.red { background: #ff5f57; }
+.yellow { background: #ffbd2e; }
+.green { background: #28c840; }
+
+.window-title {
+  margin-left: 20px;
+  font-size: 14px;
+  color: #555;
+}
+
+.window-content {
+  padding: 60px;
+  font-size: 20px;
+  line-height: 1.8;
+}
+
+/* 타자기 */
+.typewriter {
+  border-right: 2px solid #000;
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
 }
 </style>
 </head>
+
 <body>
 
-<div id="dosBox"><div id="text"></div></div>
+<div class="section">
+  <div class="window">
+    <div class="window-header">
+      <div class="dot red"></div>
+      <div class="dot yellow"></div>
+      <div class="dot green"></div>
+      <div class="window-title">stone.origin</div>
+    </div>
+    <div class="window-content">
+      <div class="typewriter" data-text="Matter precedes perception. Consciousness sleeps in stone."></div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="window">
+    <div class="window-header">
+      <div class="dot red"></div>
+      <div class="dot yellow"></div>
+      <div class="dot green"></div>
+      <div class="window-title">brain.expansion</div>
+    </div>
+    <div class="window-content">
+      <div class="typewriter" data-text="Neural networks awaken. Awareness begins to structure reality."></div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="window">
+    <div class="window-header">
+      <div class="dot red"></div>
+      <div class="dot yellow"></div>
+      <div class="dot green"></div>
+      <div class="window-title">network.extension</div>
+    </div>
+    <div class="window-content">
+      <div class="typewriter" data-text="Human and AI connect. Cognition transcends biology."></div>
+    </div>
+  </div>
+</div>
 
 <script>
+const sections = document.querySelectorAll('.section');
 
-let textDiv = document.getElementById("text");
-let step = 0;
-
-function print(t){
-    textDiv.innerHTML += t + "<br>";
-    textDiv.scrollTop = textDiv.scrollHeight;
-}
-
-function start(){
-    print("DOLBAG EMOTION SYSTEM v0.02");
-    print("돌백 감정 보정 시스템 v0.02");
-    print("");
-    print("Initialize emotional scan? (Y/N)");
-    print("감정 스캔을 시작하시겠습니까? (Y/N)");
-}
-
-document.addEventListener("keydown", function(e){
-
-    // 시작
-    if(step === 0 && e.key.toLowerCase()==="y"){
-        step = 1;
-        print("> Y");
-        print("");
-        print("Loading emotional matrix...");
-        print("감정 매트릭스 로딩 중...");
-        setTimeout(()=>{
-            print("██████████░░░░░░ 54%");
-        },800);
-        setTimeout(()=>{
-            print("████████████████ 100%");
-            askQ1();
-        },2000);
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      typeEffect(entry.target.querySelector('.typewriter'));
     }
+  });
+}, { threshold: 0.3 });
 
-    // Q1
-    else if(step===1 && e.key>="1" && e.key<="9"){
-        step=2;
-        print("> "+e.key);
-        askQ2();
+sections.forEach(section => observer.observe(section));
+
+function typeEffect(element) {
+  let text = element.getAttribute("data-text");
+  element.textContent = "";
+  let i = 0;
+  function typing() {
+    if (i < text.length) {
+      element.textContent += text.charAt(i);
+      i++;
+      setTimeout(typing, 35);
     }
-
-    // Q2
-    else if(step===2 && e.key>="1" && e.key<="9"){
-        step=3;
-        print("> "+e.key);
-        askQ3();
-    }
-
-    // Q3
-    else if(step===3 && e.key>="1" && e.key<="6"){
-        step=4;
-        print("> "+e.key);
-        analyze();
-    }
-
-});
-
-function askQ1(){
-    print("");
-    print("Q1. How do you feel today?");
-    print("Q1. 오늘 당신의 감정은 무엇입니까?");
-    print("1 Joy / 기쁨");
-    print("2 Sadness / 슬픔");
-    print("3 Loneliness / 외로움");
-    print("4 Anger / 분노");
-    print("5 Anxiety / 불안");
-    print("6 Love / 사랑");
-    print("7 Doubt / 의심");
-    print("8 Excitement / 설렘");
-    print("9 Boredom / 지루함");
+  }
+  typing();
 }
-
-function askQ2(){
-    print("");
-    print("Q2. Which emotion would you like to maintain?");
-    print("Q2. 유지하고 싶은 감정은 무엇입니까?");
-    print("(1-9 동일 선택)");
-}
-
-function askQ3(){
-    print("");
-    print("Q3. What do you need most right now?");
-    print("Q3. 지금 가장 필요한 것은 무엇입니까?");
-    print("1 Comfort / 위로");
-    print("2 Motivation / 동기");
-    print("3 Focus / 집중");
-    print("4 Rest / 휴식");
-    print("5 Recognition / 인정");
-    print("6 Connection / 연결");
-}
-
-function analyze(){
-    print("");
-    print("Cross-analyzing emotional vectors...");
-    print("감정 벡터 교차 분석 중...");
-    setTimeout(()=>{
-        print("");
-        print("Result / 결과");
-        print("EMOTION STATUS: STABLE");
-        print("감정 상태: 안정");
-        print("");
-        print("FACE OUTPUT: :-|");
-        print("출력 표정: 무표정");
-        print("");
-        print("All inputs converge.");
-        print("모든 입력은 수렴합니다.");
-    },1500);
-}
-
-start();
-
 </script>
 
 </body>
