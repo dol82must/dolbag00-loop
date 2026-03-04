@@ -16,13 +16,7 @@ body{
   align-items:flex-start;
   color:#111;
 }
-
-/* 위로 살짝 올리기 */
-.container{
-  margin-top:140px;
-}
-
-/* 박스 디자인 고급화 */
+.container{ margin-top:140px; }
 .box{
   width:420px;
   min-height:160px;
@@ -32,34 +26,19 @@ body{
   box-shadow:0 10px 40px rgba(0,0,0,0.05);
   transition:0.3s;
 }
-
 .start{
   cursor:pointer;
   text-align:center;
   font-size:18px;
-  letter-spacing:0.5px;
 }
-
-.start:hover{
-  transform:translateY(-2px);
-  box-shadow:0 20px 60px rgba(0,0,0,0.08);
-}
-
 .option{
   margin:8px 0;
   cursor:pointer;
   font-size:14px;
   opacity:0.8;
 }
-
-.option:hover{
-  opacity:0.4;
-}
-
-.progress-wrap{
-  margin-top:15px;
-}
-
+.option:hover{ opacity:0.4; }
+.progress-wrap{ margin-top:15px; }
 .progress-bar{
   width:100%;
   height:6px;
@@ -67,13 +46,11 @@ body{
   border-radius:4px;
   overflow:hidden;
 }
-
 .progress{
   height:100%;
   width:0%;
   background:#111;
 }
-
 .percent{
   font-size:12px;
   margin-top:6px;
@@ -81,34 +58,36 @@ body{
 }
 </style>
 </head>
+
 <body>
+
+<div class="container">
+  <div class="box start" id="box">
+    Test your emotion
+  </div>
+</div>
 
 <script>
 
 const box=document.getElementById("box");
 
 const emotions=[
-  
 "Joy / 기쁨","Sadness / 슬픔","Loneliness / 외로움",
 "Anger / 분노","Anxiety / 불안","Love / 사랑",
 "Doubt / 의심","Excitement / 설렘","Boredom / 지루함"
-  
 ];
 
 const needs=[
-  
 "Comfort / 위로","Motivation / 동기","Focus / 집중",
 "Rest / 휴식","Recognition / 인정","Connection / 연결"
-  
 ];
 
 let step=0;
 
-<div onclick="location.href='emotion-popup.html'">
-  Test your emotion
-</div>
+box.addEventListener("click", start);
 
 function start(){
+  box.removeEventListener("click", start);
   step=0;
   render();
 }
@@ -166,27 +145,12 @@ function load(){
   const percent=document.getElementById("percent");
 
   function animate(){
-
     if(p<54){
-
-      let speed;
-
-      if(p<20){ speed=4; }
-      else if(p<40){ speed=2; }
-      else{ speed=0.6; }
-
-      p+=speed;
-
+      p+=2;
       bar.style.width=p+"%";
       percent.innerText=Math.floor(p)+"%";
-
       setTimeout(animate,80);
-
     }else{
-
-      bar.style.width="54%";
-      percent.innerText="54%";
-
       setTimeout(result,1000);
     }
   }
@@ -210,8 +174,7 @@ function result(){
   box.querySelector("div").onclick=start;
 }
 
-<script>
-alert("JS CONNECTED");
 </script>
+
 </body>
 </html>
