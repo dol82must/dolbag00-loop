@@ -83,11 +83,13 @@ body{
 </head>
 <body>
 
-<div class="container">
-  <div class="box start" id="box">
-    Test your emotion
-  </div>
-</div>
+document.addEventListener("DOMContentLoaded", function(){
+  const box = document.getElementById("box");
+
+  box.addEventListener("click", function(){
+    start();
+  });
+});
 
 <script>
 
