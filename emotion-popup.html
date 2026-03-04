@@ -87,7 +87,11 @@ document.addEventListener("DOMContentLoaded", function(){
   const box = document.getElementById("box");
 
   box.addEventListener("click", function(){
-    start();
+    start(function start(){
+  box.onclick=null;   // 시작 후 부모 클릭 제거
+  step=0;
+  render();
+});
   });
 });
 
