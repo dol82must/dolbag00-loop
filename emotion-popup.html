@@ -9,149 +9,129 @@
 body{
   margin:0;
   background:#ffffff;
-  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
+  font-family:sans-serif;
   height:100vh;
   display:flex;
   justify-content:center;
-  align-items:flex-start;
-  color:#111;
+  align-items:center;
 }
-.container{ margin-top:140px; }
-..box{
+.box{
   width:420px;
-  min-height:180px;
-  border:1px solid #f0f0f0;
-  border-radius:22px;
-  padding:32px;
-  box-shadow:0 30px 80px rgba(0,0,0,0.06);
-  backdrop-filter: blur(6px);
-  transition:0.4s cubic-bezier(.4,0,.2,1);
-}
-.start{
-  cursor:pointer;
-  text-align:center;
-  font-size:18px;
+  padding:30px;
+  border:1px solid #ddd;
+  border-radius:20px;
 }
 .option{
   margin:8px 0;
   cursor:pointer;
-  font-size:14px;
-  opacity:0.8;
 }
-.option:hover{ opacity:0.4; }
-.progress-wrap{ margin-top:15px; }
+.option:hover{
+  opacity:0.6;
+}
 .progress-bar{
   width:100%;
   height:6px;
   background:#eee;
-  border-radius:4px;
-  overflow:hidden;
+  margin-top:15px;
 }
 .progress{
   height:100%;
   width:0%;
-  background:linear-gradient(90deg,#111,#555);
-  transition:width 0.2s ease-out;
+  background:#111;
 }
 .percent{
   font-size:12px;
   margin-top:6px;
-  opacity:0.5;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
-  <div class="box start" id="box">
-    Test your emotion
-  </div>
+<div class="box" id="box">
+  Test your emotion
 </div>
 
 <script>
 
 const box = document.getElementById("box");
 
+/* ===== 9개 감정 ===== */
 const emotions=[
-"Joy / 기쁨","Sadness / 슬픔","Loneliness / 외로움",
-"Anger / 분노","Anxiety / 불안","Love / 사랑",
-"Doubt / 의심","Excitement / 설렘","Boredom / 지루함"
+"Happy / 행복한",
+"Calm / 평온한",
+"Anxious / 불안한",
+"Angry / 화가 난",
+"Sad / 슬픈",
+"Excited / 설레는",
+"Tired / 피곤한",
+"Confused / 혼란스러운",
+"Empty / 공허한"
 ];
 
 const needs=[
-"Comfort / 위로","Motivation / 동기","Focus / 집중",
-"Rest / 휴식","Recognition / 인정","Connection / 연결"
+"Rest / 휴식",
+"Focus / 집중",
+"Connection / 연결"
 ];
 
 let step=0;
 
-box.onclick = start;
-
-function start(){
+box.onclick = function(){
   step=0;
-  render();
-}
+  showQuestion();
+};
 
-function render(){
+function showQuestion(){
 
-  let q="";
+  let question="";
   let options=[];
 
   if(step===0){
-    q="Q1<br>How do you feel today?<br><br>오늘 당신의 감정은 무엇입니까?";
+    question="Q1. How do you feel today?<br>오늘 당신의 감정은 무엇입니까?";
     options=emotions;
-  } 
+  }
   else if(step===1){
-    q="Q2<br>Which emotion would you like to maintain?<br><br>유지하고 싶은 감정은 무엇입니까?";
+    question="Q2. Which emotion to maintain?<br>유지하고 싶은 감정은 무엇입니까?";
     options=emotions;
-  } 
-  else {
-    q="Q3<br>What do you need most right now?<br><br>지금 가장 필요한 것은 무엇입니까?";
+  }
+  else{
+    question="Q3. What do you need most right now?<br>지금 가장 필요한 것은 무엇입니까?";
     options=needs;
   }
 
-  box.innerHTML = `<div style="margin-bottom:16px;">${q}</div>`;
+  box.innerHTML="<div>"+question+"</div>";
 
   for(let i=0;i<options.length;i++){
 
-    const d=document.createElement("div");
-    d.className="option";
-    d.innerText=options[i];
+    const div=document.createElement("div");
+    div.className="option";
+    div.innerText=options[i];
 
-   div.onclick=function(event){
+    div.onclick=function(e){
+      e.stopPropagation();
+      step++;
+      if(step<3){
+        showQuestion();
+      }else{
+        startLoading();
+      }
+    };
 
-  event.stopPropagation();   // ★ 이 줄 추가
-
-  step++;
-  if(step<3){
-    render();
-  }else{
-    box.innerHTML="Done.";
-  }
-};;
-
-    box.appendChild(d);
+    box.appendChild(div);
   }
 }
 
-function load(){
+function startLoading(){
 
   box.innerHTML=`
-<div style="font-size:14px;letter-spacing:1px;margin-bottom:8px;">
-AI ANALYZING...
-</div>
-<div style="font-size:12px;opacity:0.5;margin-bottom:20px;">
-감정 데이터 처리 중
-</div>
-
-<div class="progress-wrap">
+  AI analyzing...<br>
+  감정 데이터 분석 중
   <div class="progress-bar">
     <div class="progress" id="bar"></div>
   </div>
   <div class="percent" id="percent">0%</div>
-</div>
-`;
+  `;
 
   let p=0;
   const bar=document.getElementById("bar");
@@ -159,90 +139,39 @@ AI ANALYZING...
 
   function animate(){
 
-  if(p < 54){
+    if(p<200){
 
-    let speed;
-    let delay;
+      let speed;
 
-    if(p < 20){
-      speed = 3.5;
-      delay = 60;
+      if(p<30) speed=4;          // 빠르게 시작
+      else if(p<70) speed=2;     // 중간
+      else if(p<120) speed=1;    // 느려짐
+      else speed=0.5;            // 거의 멈추는 느낌
+
+      p+=speed;
+
+      bar.style.width=(p>100?100:p)+"%";
+      percent.innerText=Math.floor(p)+"%";
+
+      setTimeout(animate,60);
+
+    }else{
+
+      bar.style.width="100%";
+      percent.innerText="200%";
+
+      setTimeout(showResult,1200); // 1~2초 유지
     }
-    else if(p < 40){
-      speed = 1.8;
-      delay = 90;
-    }
-    else{
-      speed = 0.5;
-      delay = 140;
-    }
-
-    p += speed;
-
-    bar.style.width = p + "%";
-    percent.innerText = Math.floor(p) + "%";
-
-    setTimeout(animate, delay);
-
-  }else{
-
-    bar.style.width = "54%";
-    percent.innerText = "54%";
-
-    setTimeout(result, 1200);
   }
-}
 
   animate();
 }
 
-function result(){
-
-  box.innerHTML = `
-
-  <div style="font-size:12px;letter-spacing:1px;opacity:0.5;">
-    EMOTION STATUS / 감정 상태
-  </div>
-
-  <div style="margin-top:6px;font-size:18px;margin-bottom:28px;">
-    Stable / 안정
-  </div>
-
-  <div style="display:flex;align-items:center;gap:24px;">
-
-    <img src="einstein.png"
-         style="
-         width:120px;
-         filter:grayscale(100%);
-         opacity:0.92;
-         ">
-
-    <div>
-      <div style="font-size:12px;letter-spacing:1px;opacity:0.5;">
-        FACE OUTPUT / 출력 표정
-      </div>
-
-      <div style="margin-top:8px;font-size:16px;">
-        AI Emotional Reflection<br>
-        감정 반영 결과
-      </div>
-    </div>
-
-  </div>
-
-  <div style="
-      margin-top:36px;
-      font-size:12px;
-      opacity:0.35;
-      cursor:pointer;
-      letter-spacing:1px;
-  ">
-    RESTART / 다시 시작
-  </div>
-
+function showResult(){
+  box.innerHTML=`
+  Analysis Complete.<br>
+  감정 분석이 완료되었습니다.
   `;
-
-  box.querySelector("div:last-child").onclick = start;
 }
 
 </script>
