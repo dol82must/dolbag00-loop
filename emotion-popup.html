@@ -41,6 +41,7 @@ body{
 }
 .percent{
   font-size:12px;
+  
   margin-top:6px;
 }
 </style>
@@ -126,13 +127,34 @@ function startLoading(){
 
   box.innerHTML=`
   AI analyzing...<br>
-  감정 데이터 분석 중
+  감정 데이터 처리 중
   <div class="progress-bar">
     <div class="progress" id="bar"></div>
   </div>
   <div class="percent" id="percent">0%</div>
   `;
 
+  function showCompleteScreen(){
+
+  box.innerHTML=`
+  감정 분석이 완료되었습니다.<br><br>
+
+  <div id="viewResult" style="
+      padding:8px 12px;
+      border:1px solid #aaa;
+      border-radius:10px;
+      display:inline-block;
+      cursor:pointer;">
+    결과보기
+  </div>
+  `;
+
+  document.getElementById("viewResult").onclick=function(){
+    showResult();
+  };
+
+}
+  
   let p=0;
   const bar=document.getElementById("bar");
   const percent=document.getElementById("percent");
@@ -156,22 +178,44 @@ function startLoading(){
       setTimeout(animate,60);
 
     }else{
+  bar.style.width="100%";
+  percent.innerText="200%";
 
-      bar.style.width="100%";
-      percent.innerText="200%";
-
-      setTimeout(showResult,1200); // 1~2초 유지
-    }
+  setTimeout(showCompleteScreen,1000);
+}
   }
 
   animate();
 }
 
 function showResult(){
+
   box.innerHTML=`
-  Analysis Complete.<br>
-  감정 분석이 완료되었습니다.
+  <strong>Result / 結果</strong><br><br>
+
+  Today, maintain your poker face.<br>
+  今日はポーカーフェイスを維持してください。<br><br>
+
+  결과 : 오늘은 포커페이스를 유지하세요.
+
+  <br><br>
+
+  <div id="restart" style="
+      margin-top:15px;
+      padding:8px 12px;
+      border:1px solid #aaa;
+      border-radius:10px;
+      display:inline-block;
+      cursor:pointer;">
+    Restart
+  </div>
   `;
+
+  document.getElementById("restart").onclick=function(){
+    step=0;
+    showQuestion();
+  };
+
 }
 
 </script>
