@@ -146,7 +146,42 @@ function startLoading(){
   <div class="percent" id="percent">0%</div>
   `;
 
-setTimeout(showComplete,1000);
+  let p=0;
+  const bar=document.getElementById("bar");
+  const percent=document.getElementById("percent");
+
+  function animate(){
+
+    if(p < 200){
+
+      let speed;
+
+      if(p < 30) speed = 4;
+      else if(p < 70) speed = 2;
+      else if(p < 120) speed = 1;
+      else speed = 0.5;
+
+      p += speed;
+
+      bar.style.width = (p > 100 ? 100 : p) + "%";
+      percent.innerText = Math.floor(p) + "%";
+
+      setTimeout(animate,60);
+
+    }else{
+
+      bar.style.width="100%";
+      percent.innerText="200%";
+
+      setTimeout(showComplete,1000);
+
+    }
+
+  }
+
+  animate();
+
+}
 
   function showComplete(){
     
@@ -176,33 +211,7 @@ document.getElementById("viewResult").onclick = showResult;
   const bar=document.getElementById("bar");
   const percent=document.getElementById("percent");
 
-  function animate(){
 
-    if(p<200){
-
-      let speed;
-
-      if(p<30) speed=4;          // 빠르게 시작
-      else if(p<70) speed=2;     // 중간
-      else if(p<120) speed=1;    // 느려짐
-      else speed=0.5;            // 거의 멈추는 느낌
-
-      p+=speed;
-
-      bar.style.width=(p>100?100:p)+"%";
-      percent.innerText=Math.floor(p)+"%";
-
-      setTimeout(animate,60);
-
-    }else{
-  bar.style.width="100%";
-  percent.innerText="200%";
-
-  setTimeout(showResult,1000);
-  }
-
-  animate();
-}
 
 function showResult(){
 
