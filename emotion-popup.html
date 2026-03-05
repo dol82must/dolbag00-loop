@@ -57,6 +57,12 @@ body{
 <script>
 const box = document.getElementById("box");
 
+
+function startTest(){
+  step = 0;
+  showQuestion();
+}
+
 /* ===== 9개 감정 ===== */
 const emotions=[
   
@@ -91,11 +97,6 @@ box.onclick = function(){
   showQuestion();
 };
 
-
-function startTest(){
-  step = 0;
-  showQuestion();
-}
 
 function showQuestion(){
 
