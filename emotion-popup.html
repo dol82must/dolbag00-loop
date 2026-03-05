@@ -50,8 +50,8 @@ body{
 
 <body>
 
-<div class="box" id="box">
-  test your emotion
+<div class="box" id="box" onclick="startTest()">
+  Test your emotion
 </div>
 
 <script>
@@ -90,6 +90,12 @@ box.onclick = function(){
   step=0;
   showQuestion();
 };
+
+
+function startTest(){
+  step = 0;
+  showQuestion();
+}
 
 function showQuestion(){
 
