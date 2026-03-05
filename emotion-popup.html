@@ -89,8 +89,6 @@ const needs=[
 "Snack / 간식"
 ];
 
-let step=0;
-
 box.onclick = function(){
   step=0;
   showQuestion();
@@ -148,24 +146,28 @@ function startLoading(){
   <div class="percent" id="percent">0%</div>
   `;
 
+setTimeout(showComplete,1000);
+
   function showComplete(){
+    
 
-  box.innerHTML = `
-  감정분석이 완료되었습니다<br><br>
+box.innerHTML = `
+감정분석이 완료되었습니다<br><br>
 
-  <div id="viewResult" style="
-  margin-top:10px;
-  padding:10px;
-  border:1px solid #ccc;
-  border-radius:10px;
-  cursor:pointer;
-  text-align:center;
-  ">
-  결과보기
-  </div>
-  `;
+<div id="viewResult" style="
+margin-top:10px;
+padding:10px;
+border:1px solid #ccc;
+border-radius:10px;
+cursor:pointer;
+text-align:center;
+">
+결과보기
+</div>
+`;
 
-  document.getElementById("viewResult").onclick = showResult;
+document.getElementById("viewResult").onclick = showResult;
+
 }
 
 }
@@ -229,8 +231,6 @@ document.getElementById("restartBtn").onclick=function(){
 step=0;
 box.innerHTML="test your emotion";
 };
-
-}
 
 }
 
