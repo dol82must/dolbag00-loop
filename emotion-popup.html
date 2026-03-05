@@ -152,32 +152,35 @@ function showQuestion(){
 
   function animate(){
 
-    if(p < 200){
+  if(p < 200){
 
-      let speed;
+    let speed;
 
-      if(p < 30) speed = 4;
-      else if(p < 70) speed = 2;
-      else if(p < 120) speed = 1;
-      else speed = 0.5;
+    if(p < 30) speed = 4;          // 시작 빠르게
+    else if(p < 54) speed = 2;     // 54까지 진행
+    else if(p < 60) speed = 0.2;   // 54 근처에서 거의 멈춤
+    else if(p < 120) speed = 1;    // 다시 진행
+    else speed = 0.5;              // 마지막 느리게
 
-      p += speed;
+    p += speed;
 
-      bar.style.width = (p > 100 ? 100 : p) + "%";
-      percent.innerText = Math.floor(p) + "%";
+    bar.style.width = (p > 100 ? 100 : p) + "%";
+    percent.innerText = Math.floor(p) + "%";
+    if(Math.floor(p) == 54){
+percent.innerText = "54%  AI analyzing...";
+}
+    setTimeout(animate,80);
 
-      setTimeout(animate,60);
+  }else{
 
-    }else{
+    bar.style.width="100%";
+    percent.innerText="200%";
 
-      bar.style.width="100%";
-      percent.innerText="200%";
-
-      setTimeout(showComplete,1000);
-
-    }
+    setTimeout(showComplete,1000);
 
   }
+
+}
 
   animate();
 
