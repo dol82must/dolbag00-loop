@@ -199,31 +199,33 @@ function startLoading(){
 
 function showResult(){
 
-  box.innerHTML=`
-  <strong>Result / 結果</strong><br><br>
+box.innerHTML = `
 
-  Today, maintain your poker face.<br>
-  今日はポーカーフェイスを維持してください。<br><br>
+결과 Result<br><br>
 
-  결과 : 오늘은 포커페이스를 유지하세요.
+오늘은 포커페이스를 유지하세요<br>
+Maintain a poker face today.<br><br>
 
-  <br><br>
+<div style="
+margin-top:20px;
+padding:10px;
+border:1px solid #ccc;
+border-radius:10px;
+cursor:pointer;
+text-align:center;
+" id="restartBtn">
 
-  <div id="restart" style="
-      margin-top:15px;
-      padding:8px 12px;
-      border:1px solid #aaa;
-      border-radius:10px;
-      display:inline-block;
-      cursor:pointer;">
-    Restart
-  </div>
-  `;
+Restart
 
-  document.getElementById("restart").onclick=function(){
-    step=0;
-    showQuestion();
-  };
+</div>
+`;
+
+document.getElementById("restartBtn").onclick=function(){
+step=0;
+box.innerHTML="Test your emotion";
+};
+
+}
 
 }
 
