@@ -1,224 +1,233 @@
+기존 전체
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>Emotion Test</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test your emotion</title>
 
 <style>
-
 body{
-font-family: Arial, sans-serif;
-background:black;
-color:white;
-text-align:center;
-padding:40px;
+  margin:0;
+  background:#ffffff;
+  font-family:sans-serif;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
-
-.container{
-max-width:420px;
-margin:auto;
-padding:30px;
-border:1px solid #aaa;
-border-radius:12px;
-box-shadow:0 0 15px #d0d0d0;
+.box{
+  width:420px;
+  padding:30px;
+  border:1px solid #ddd;
+  border-radius:20px;
 }
-
-button{
-padding:12px 20px;
-margin:8px;
-border:none;
-border-radius:8px;
-background:#222;
-color:white;
-cursor:pointer;
-font-size:14px;
+.option{
+  margin:8px 0;
+  cursor:pointer;
 }
-
-button:hover{
-background:#444;
+.option:hover{
+  opacity:0.6;
 }
-
-.start-btn{
-border:1px solid silver;
-box-shadow:0 0 12px #d0d0d0;
+.progress-bar{
+  width:100%;
+  height:6px;
+  background:#eee;
+  margin-top:15px;
 }
-
-.loading{
-font-size:20px;
-margin-top:30px;
+.progress{
+  height:100%;
+  width:0%;
+  background:#111;
 }
-
+.percent{
+  font-size:12px;
+  
+  margin-top:6px;
+}
 </style>
 </head>
 
 <body>
 
-<div class="container">
-
-<!-- START SCREEN -->
-<div id="startScreen">
-
-<h2>Test your emotion</h2>
-
-<button id="startBtn" class="start-btn">
-Start
-</button>
-
+<div class="box" id="box">
+  Test your emotion
 </div>
-
-
-<!-- QUESTION SCREEN -->
-<div id="questionScreen" style="display:none">
-
-<h3 id="questionTitle"></h3>
-
-<div id="answers"></div>
-
-</div>
-
-
-<!-- LOADING SCREEN -->
-<div id="loadingScreen" style="display:none">
-
-<div class="loading">
-Loading... 54%
-</div>
-
-<div style="margin-top:20px;">
-감정 분석이 완료되었습니다
-</div>
-
-<button id="resultBtn">
-결과보기
-</button>
-
-</div>
-
-
-<!-- RESULT SCREEN -->
-<div id="resultScreen" style="display:none">
-
-<h3>Result</h3>
-
-<p id="resultText"></p>
-
-<button onclick="restartTest()">
-Restart
-</button>
-
-</div>
-
-</div>
-
-
 
 <script>
 
-let currentQ = 0
+const box = document.getElementById("box");
 
-const questions = [
+/* ===== 9개 감정 ===== */
+const emotions=[
+  
+"Happy / 행복한",
+"Calm / 평온한",
+"Anxious / 불안한",
+"Angry / 화가 난",
+"Sad / 슬픈",
+"Excited / 설레는",
+"Tired / 피곤한",
+"Confused / 혼란스러운",
+"Empty / 공허한"
+];
 
-{
-q:"How do you feel today? / 오늘 당신의 감정은 무엇입니까?",
-a:[
+const needs=[
+  
 "Rest / 휴식",
 "Focus / 집중",
-"Connection / 연결"
-]
-},
-
-{
-q:"What do you need now? / 지금 필요한 것은?",
-a:[
+"Connection / 연결",
 "Hug / 허그",
 "Love / 사랑",
-"Art / 예술"
-]
-},
-
-{
-q:"What would help your mood? / 기분을 바꾸려면?",
-a:[
+"Art / 예술",
 "Trip / 여행",
 "Running / 러닝",
 "Snack / 간식"
-]
-}
+];
 
-]
+let step=0;
 
-
-
-document.getElementById("startBtn").onclick=function(){
-
-document.getElementById("startScreen").style.display="none"
-
-document.getElementById("questionScreen").style.display="block"
-
-showQuestion()
-
-}
-
-
+box.onclick = function(){
+  step=0;
+  showQuestion();
+};
 
 function showQuestion(){
 
-let q = questions[currentQ]
+  let question="";
+  let options=[];
 
-document.getElementById("questionTitle").innerText=q.q
+  if(step===0){
+    question="Q1. How do you feel today?<br>오늘 당신의 감정은 무엇입니까?";
+    options=emotions;
+  }
+  else if(step===1){
+    question="Q2. Which emotion to maintain?<br>유지하고 싶은 감정은 무엇입니까?";
+    options=emotions;
+  }
+  else{
+    question="Q3. What do you need most right now?<br>지금 가장 필요한 것은 무엇입니까?";
+    options=needs;
+  }
 
-let answersHTML=""
+  box.innerHTML="<div>"+question+"</div>";
 
-q.a.forEach(a=>{
-answersHTML += `<button onclick="nextQuestion()">${a}</button>`
-})
+  for(let i=0;i<options.length;i++){
 
-document.getElementById("answers").innerHTML=answersHTML
+    const div=document.createElement("div");
+    div.className="option";
+    div.innerText=options[i];
 
+    div.onclick=function(e){
+      e.stopPropagation();
+      step++;
+      if(step<3){
+        showQuestion();
+      }else{
+        startLoading();
+      }
+    };
+
+    box.appendChild(div);
+  }
 }
 
+function startLoading(){
 
+  box.innerHTML=`
+  AI analyzing...<br>
+  당신의 감정 데이터 처리 중
+  <div class="progress-bar">
+    <div class="progress" id="bar"></div>
+  </div>
+  <div class="percent" id="percent">0%</div>
+  `;
 
-function nextQuestion(){
+  function showComplete(){
 
-currentQ++
+  box.innerHTML = `
+  감정분석이 완료되었습니다<br><br>
 
-if(currentQ < questions.length){
+  <div id="viewResult" style="
+  margin-top:10px;
+  padding:10px;
+  border:1px solid #ccc;
+  border-radius:10px;
+  cursor:pointer;
+  text-align:center;
+  ">
+  결과보기
+  </div>
+  `;
 
-showQuestion()
-
-}else{
-
-document.getElementById("questionScreen").style.display="none"
-
-document.getElementById("loadingScreen").style.display="block"
-
+  document.getElementById("viewResult").onclick = showResult;
 }
 
 }
+  
+  let p=0;
+  const bar=document.getElementById("bar");
+  const percent=document.getElementById("percent");
 
+  function animate(){
 
+    if(p<200){
 
-document.getElementById("resultBtn").onclick=function(){
+      let speed;
 
-document.getElementById("loadingScreen").style.display="none"
+      if(p<30) speed=4;          // 빠르게 시작
+      else if(p<70) speed=2;     // 중간
+      else if(p<120) speed=1;    // 느려짐
+      else speed=0.5;            // 거의 멈추는 느낌
 
-document.getElementById("resultScreen").style.display="block"
+      p+=speed;
 
-document.getElementById("resultText").innerHTML=
-"Today keep a poker face.<br><br>今日はポーカーフェイスを保ってください。"
+      bar.style.width=(p>100?100:p)+"%";
+      percent.innerText=Math.floor(p)+"%";
 
+      setTimeout(animate,60);
+
+    }else{
+  bar.style.width="100%";
+  percent.innerText="200%";
+
+  setTimeout(showComplete,1000);
+}
+  }
+
+  animate();
 }
 
+function showResult(){
 
+box.innerHTML = `
 
-function restartTest(){
+결과 Result<br><br>
 
-currentQ=0
+오늘은 포커페이스를 유지하세요<br>
+Maintain a poker face today.<br><br>
 
-document.getElementById("resultScreen").style.display="none"
+<div style="
+margin-top:20px;
+padding:10px;
+border:1px solid #ccc;
+border-radius:10px;
+cursor:pointer;
+text-align:center;
+" id="restartBtn">
 
-document.getElementById("startScreen").style.display="block"
+Restart
+
+</div>
+`;
+
+document.getElementById("restartBtn").onclick=function(){
+step=0;
+box.innerHTML="Test your emotion";
+};
+
+}
 
 }
 
@@ -226,3 +235,5 @@ document.getElementById("startScreen").style.display="block"
 
 </body>
 </html>
+
+
