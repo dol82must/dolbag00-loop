@@ -8,77 +8,57 @@
 <style>
 
 body{
-margin:0;
-background:#ffffff;
-font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
+  margin:0;
+  background:#ffffff;
+  font-family:sans-serif;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
 .box{
-width:420px;
-padding:34px;
-border-radius:22px;
+  width:420px;
+  padding:32px;
+  border-radius:22px;
 
-border:1px solid #ddd;
+  border:1px solid #d9d9d9;
 
-box-shadow:
-0 0 12px rgba(255,255,255,0.8),
-0 0 30px rgba(200,200,200,0.6),
-0 20px 60px rgba(0,0,0,0.08);
+  box-shadow:
+  0 0 10px rgba(255,255,255,0.8),
+  0 0 25px rgba(200,200,200,0.5),
+  inset 0 0 8px rgba(255,255,255,0.9);
 
-background:white;
-}
+  background:linear-gradient(
+    145deg,
+    #ffffff,
+    #f4f4f4
+  );
 
-.title{
-font-size:18px;
-text-align:center;
-cursor:pointer;
+  cursor:pointer;
 }
 
 .option{
-margin:10px 0;
-cursor:pointer;
-font-size:15px;
-opacity:0.85;
-}
-
-.option:hover{
-opacity:0.45;
+  margin:8px 0;
+  cursor:pointer;
 }
 
 .progress-bar{
-width:100%;
-height:6px;
-background:#eee;
-border-radius:4px;
-margin-top:18px;
-overflow:hidden;
+  width:100%;
+  height:6px;
+  background:#eee;
+  margin-top:15px;
 }
 
 .progress{
-height:100%;
-width:0%;
-background:linear-gradient(90deg,#111,#777);
+  height:100%;
+  width:0%;
+  background:#111;
 }
 
 .percent{
-font-size:12px;
-margin-top:6px;
-opacity:0.6;
-}
-
-.button{
-margin-top:22px;
-font-size:14px;
-cursor:pointer;
-opacity:0.7;
-}
-
-.button:hover{
-opacity:0.35;
+  font-size:12px;
+  margin-top:6px;
 }
 
 </style>
@@ -87,14 +67,12 @@ opacity:0.35;
 <body>
 
 <div class="box" id="box">
-<div class="title">Test your emotion</div>
+Test your emotion
 </div>
 
 <script>
 
-const box=document.getElementById("box")
-
-let step=0
+const box = document.getElementById("box");
 
 const emotions=[
 
@@ -108,7 +86,7 @@ const emotions=[
 "Confused / 혼란스러운",
 "Empty / 공허한"
 
-]
+];
 
 const needs=[
 
@@ -122,68 +100,75 @@ const needs=[
 "Running / 러닝",
 "Snack / 간식"
 
-]
+];
 
-box.onclick=start
+let step=0;
 
-function start(){
+box.onclick=function(){
 
-step=0
-showQuestion()
+step=0;
+showQuestion();
 
 }
 
 function showQuestion(){
 
-let question=""
-let options=[]
+let question="";
+let options=[];
 
 if(step===0){
 
-question="Q1. How do you feel today?<br>오늘 당신의 감정은 무엇입니까?"
-options=emotions
+question="Q1<br>How do you feel today?<br>오늘 당신의 감정은 무엇입니까?";
+options=emotions;
 
 }
 
 else if(step===1){
 
-question="Q2. Which emotion do you want to maintain?<br>유지하고 싶은 감정은 무엇입니까?"
-options=emotions
+question="Q2<br>Which emotion would you like to maintain?<br>유지하고 싶은 감정은 무엇입니까?";
+options=emotions;
 
 }
 
 else{
 
-question="Q3. What do you need most right now?<br>지금 가장 필요한 것은 무엇입니까?"
-options=needs
+question="Q3<br>What do you need most right now?<br>지금 가장 필요한 것은 무엇입니까?";
+options=needs;
 
 }
 
-box.innerHTML="<div>"+question+"</div>"
+box.innerHTML="<div>"+question+"</div>";
 
-options.forEach(opt=>{
+for(let i=0;i<options.length;i++){
 
-const div=document.createElement("div")
-div.className="option"
-div.innerText=opt
+const div=document.createElement("div");
+
+div.className="option";
+div.innerText=options[i];
 
 div.onclick=function(e){
 
-e.stopPropagation()
+e.stopPropagation();
 
-step++
+step++;
 
 if(step<3){
-showQuestion()
-}else{
-startLoading()
-}
+
+showQuestion();
 
 }
 
-box.appendChild(div)
+else{
 
-})
+startLoading();
+
+}
+
+};
+
+box.appendChild(div);
+
+}
 
 }
 
@@ -200,59 +185,60 @@ AI analyzing...<br>
 
 <div class="percent" id="percent">0%</div>
 
-`
+`;
 
-let p=0
+let p=0;
 
-const bar=document.getElementById("bar")
-const percent=document.getElementById("percent")
+const bar=document.getElementById("bar");
+const percent=document.getElementById("percent");
 
 function animate(){
 
 if(p<54){
 
-let speed
+let speed;
 
-if(p<20) speed=3
-else if(p<40) speed=1.4
-else speed=0.4
+if(p<20) speed=3;
+else if(p<40) speed=1.5;
+else speed=0.5;
 
-p+=speed
+p+=speed;
 
-bar.style.width=p+"%"
-percent.innerText=Math.floor(p)+"%"
+bar.style.width=p+"%";
+percent.innerText=Math.floor(p)+"%";
 
-setTimeout(animate,90)
+setTimeout(animate,80);
 
 }
 
 else{
 
-bar.style.width="54%"
-percent.innerText="54%"
+bar.style.width="54%";
+percent.innerText="54%";
 
-setTimeout(showComplete,1200)
-
-}
+setTimeout(showFinish,1000);
 
 }
 
-animate()
+}
+
+animate();
 
 }
 
-function showComplete(){
+function showFinish(){
 
 box.innerHTML=`
 
-감정 분석이 완료되었습니다<br>
-Emotion analysis complete
+감정 분석이 완료되었습니다<br><br>
 
-<div class="button" onclick="showResult()">
-결과보기 / View result
+<div id="viewResult" style="cursor:pointer;font-weight:bold;">
+결과 보기
 </div>
 
-`
+`;
+
+document.getElementById("viewResult").onclick=showResult;
 
 }
 
@@ -260,28 +246,22 @@ function showResult(){
 
 box.innerHTML=`
 
-<div style="font-size:12px;opacity:0.6;">EMOTION STATUS / 감정 상태</div>
+Result / 결과<br><br>
 
-<div style="margin-top:6px;font-size:18px;margin-bottom:24px;">
-Stable / 안정
+오늘은 포커페이스를 유지하세요.<br>
+Keep a poker face today.<br><br>
+
+<div id="restart" style="margin-top:20px;cursor:pointer;">
+Restart
 </div>
 
-<div style="margin-bottom:14px">
-Result / 결과
-</div>
+`;
 
-<div style="font-size:15px;line-height:1.6">
+document.getElementById("restart").onclick=function(){
 
-Maintain a poker face today.<br>
-오늘은 포커페이스를 유지하세요.
+box.innerHTML="Test your emotion";
 
-</div>
-
-<div class="button" onclick="start()">
-Restart / 다시 시작
-</div>
-
-`
+}
 
 }
 
