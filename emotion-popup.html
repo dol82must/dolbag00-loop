@@ -1,64 +1,51 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Test your emotion</title>
+<title>Emotion Test</title>
 
 <style>
 
 body{
-  margin:0;
-  background:#ffffff;
-  font-family:sans-serif;
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
+font-family: Arial, sans-serif;
+background:black;
+color:white;
+text-align:center;
+padding:40px;
 }
 
-.box{
-  width:420px;
-  padding:32px;
-  border-radius:22px;
-
-  border:1px solid #d9d9d9;
-
-  box-shadow:
-  0 0 10px rgba(255,255,255,0.8),
-  0 0 25px rgba(200,200,200,0.5),
-  inset 0 0 8px rgba(255,255,255,0.9);
-
-  background:linear-gradient(
-    145deg,
-    #ffffff,
-    #f4f4f4
-  );
-
-  cursor:pointer;
+.container{
+max-width:420px;
+margin:auto;
+padding:30px;
+border:1px solid #aaa;
+border-radius:12px;
+box-shadow:0 0 15px #d0d0d0;
 }
 
-.option{
-  margin:8px 0;
-  cursor:pointer;
+button{
+padding:12px 20px;
+margin:8px;
+border:none;
+border-radius:8px;
+background:#222;
+color:white;
+cursor:pointer;
+font-size:14px;
 }
 
-.progress-bar{
-  width:100%;
-  height:6px;
-  background:#eee;
-  margin-top:15px;
+button:hover{
+background:#444;
 }
 
-.progress{
-  height:100%;
-  width:0%;
-  background:#111;
+.start-btn{
+border:1px solid silver;
+box-shadow:0 0 12px #d0d0d0;
 }
 
-.percent{
-  font-size:12px;
-  margin-top:6px;
+.loading{
+font-size:20px;
+margin-top:30px;
 }
 
 </style>
@@ -66,202 +53,172 @@ body{
 
 <body>
 
-<div class="box" id="box">
-Test your emotion
+<div class="container">
+
+<!-- START SCREEN -->
+<div id="startScreen">
+
+<h2>Test your emotion</h2>
+
+<button id="startBtn" class="start-btn">
+Start
+</button>
+
 </div>
+
+
+<!-- QUESTION SCREEN -->
+<div id="questionScreen" style="display:none">
+
+<h3 id="questionTitle"></h3>
+
+<div id="answers"></div>
+
+</div>
+
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen" style="display:none">
+
+<div class="loading">
+Loading... 54%
+</div>
+
+<div style="margin-top:20px;">
+감정 분석이 완료되었습니다
+</div>
+
+<button id="resultBtn">
+결과보기
+</button>
+
+</div>
+
+
+<!-- RESULT SCREEN -->
+<div id="resultScreen" style="display:none">
+
+<h3>Result</h3>
+
+<p id="resultText"></p>
+
+<button onclick="restartTest()">
+Restart
+</button>
+
+</div>
+
+</div>
+
+
 
 <script>
 
-const box = document.getElementById("box");
+let currentQ = 0
 
-const emotions=[
+const questions = [
 
-"Happy / 행복한",
-"Calm / 평온한",
-"Anxious / 불안한",
-"Angry / 화가 난",
-"Sad / 슬픈",
-"Excited / 설레는",
-"Tired / 피곤한",
-"Confused / 혼란스러운",
-"Empty / 공허한"
-
-];
-
-const needs=[
-
+{
+q:"How do you feel today? / 오늘 당신의 감정은 무엇입니까?",
+a:[
 "Rest / 휴식",
 "Focus / 집중",
-"Connection / 연결",
+"Connection / 연결"
+]
+},
+
+{
+q:"What do you need now? / 지금 필요한 것은?",
+a:[
 "Hug / 허그",
 "Love / 사랑",
-"Art / 예술",
+"Art / 예술"
+]
+},
+
+{
+q:"What would help your mood? / 기분을 바꾸려면?",
+a:[
 "Trip / 여행",
 "Running / 러닝",
 "Snack / 간식"
+]
+}
 
-];
+]
 
-let step=0;
 
-box.onclick=function(){
 
-step=0;
-showQuestion();
+document.getElementById("startBtn").onclick=function(){
+
+document.getElementById("startScreen").style.display="none"
+
+document.getElementById("questionScreen").style.display="block"
+
+showQuestion()
 
 }
+
+
 
 function showQuestion(){
 
-let question="";
-let options=[];
+let q = questions[currentQ]
 
-if(step===0){
+document.getElementById("questionTitle").innerText=q.q
 
-question="Q1<br>How do you feel today?<br>오늘 당신의 감정은 무엇입니까?";
-options=emotions;
+let answersHTML=""
 
-}
+q.a.forEach(a=>{
+answersHTML += `<button onclick="nextQuestion()">${a}</button>`
+})
 
-else if(step===1){
-
-question="Q2<br>Which emotion would you like to maintain?<br>유지하고 싶은 감정은 무엇입니까?";
-options=emotions;
+document.getElementById("answers").innerHTML=answersHTML
 
 }
 
-else{
 
-question="Q3<br>What do you need most right now?<br>지금 가장 필요한 것은 무엇입니까?";
-options=needs;
 
-}
+function nextQuestion(){
 
-box.innerHTML="<div>"+question+"</div>";
+currentQ++
 
-for(let i=0;i<options.length;i++){
+if(currentQ < questions.length){
 
-const div=document.createElement("div");
+showQuestion()
 
-div.className="option";
-div.innerText=options[i];
+}else{
 
-div.onclick=function(e){
+document.getElementById("questionScreen").style.display="none"
 
-e.stopPropagation();
-
-step++;
-
-if(step<3){
-
-showQuestion();
-
-}
-
-else{
-
-startLoading();
-
-}
-
-};
-
-box.appendChild(div);
+document.getElementById("loadingScreen").style.display="block"
 
 }
 
 }
 
-function startLoading(){
 
-box.innerHTML=`
 
-AI analyzing...<br>
-감정 데이터 분석 중
+document.getElementById("resultBtn").onclick=function(){
 
-<div class="progress-bar">
-<div class="progress" id="bar"></div>
-</div>
+document.getElementById("loadingScreen").style.display="none"
 
-<div class="percent" id="percent">0%</div>
+document.getElementById("resultScreen").style.display="block"
 
-`;
-
-let p=0;
-
-const bar=document.getElementById("bar");
-const percent=document.getElementById("percent");
-
-function animate(){
-
-if(p<54){
-
-let speed;
-
-if(p<20) speed=3;
-else if(p<40) speed=1.5;
-else speed=0.5;
-
-p+=speed;
-
-bar.style.width=p+"%";
-percent.innerText=Math.floor(p)+"%";
-
-setTimeout(animate,80);
+document.getElementById("resultText").innerHTML=
+"Today keep a poker face.<br><br>今日はポーカーフェイスを保ってください。"
 
 }
 
-else{
 
-bar.style.width="54%";
-percent.innerText="54%";
 
-setTimeout(showFinish,1000);
+function restartTest(){
 
-}
+currentQ=0
 
-}
+document.getElementById("resultScreen").style.display="none"
 
-animate();
-
-}
-
-function showFinish(){
-
-box.innerHTML=`
-
-감정 분석이 완료되었습니다<br><br>
-
-<div id="viewResult" style="cursor:pointer;font-weight:bold;">
-결과 보기
-</div>
-
-`;
-
-document.getElementById("viewResult").onclick=showResult;
-
-}
-
-function showResult(){
-
-box.innerHTML=`
-
-Result / 결과<br><br>
-
-오늘은 포커페이스를 유지하세요.<br>
-Keep a poker face today.<br><br>
-
-<div id="restart" style="margin-top:20px;cursor:pointer;">
-Restart
-</div>
-
-`;
-
-document.getElementById("restart").onclick=function(){
-
-box.innerHTML="Test your emotion";
-
-}
+document.getElementById("startScreen").style.display="block"
 
 }
 
