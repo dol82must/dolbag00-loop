@@ -188,8 +188,6 @@ box.onclick = function(){
   showComplete();
 };
 
-}
-
   function showComplete(){
     
 box.innerHTML = `
@@ -210,8 +208,11 @@ View Result<br>결과 보기
 
 document.getElementById("viewResult").onclick = showResult;
 
-}
-  
+box.onclick = function(){
+  step=0;
+  showResult();
+};
+
 function showResult(){
 
 box.innerHTML = `
